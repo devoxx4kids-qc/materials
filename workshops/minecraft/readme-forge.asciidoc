@@ -81,7 +81,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 @Mod(modid = MainMod.MODID, version = MainMod.VERSION)
 public class MainMod {
-	public static final String MODID = "MyMods";
+	public static final String MODID = "devoxx4kids";
 	public static final String VERSION = "1.0";
 
 	@EventHandler
@@ -91,6 +91,32 @@ public class MainMod {
 }
 ----
 ====
+
+We can add a descriptive file for our new mod. To do this, right click on "src/main/resources" and select New > Other > File. Name it `mcmod.info`. The middle of your screen will show its empty content. Insert text in <<Setting_Up_The_mcmod_info_File>>.
+You can customize it with a logo for example.
+
+[[Setting_Up_The_mcmod_info_File]]
+.Set up the mcmod.info file
+====
+[source, text]
+----
+[
+{
+  "modid": "devoxx4kids",
+  "name": "Devoxx4Kids: Minecraft workshop mod.",
+  "mcversion": "${mcversion}",
+  "url": "http://www.devoxx4kids.org/",
+  "updateUrl": "",
+  "authorList": ["Devoxx4Kids team and contributors"],
+  "credits": "",
+  "logoFile": "devoxx4kids_logo.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]
+----
+====
+
 
 Your main file is now ready to go.
 
@@ -153,7 +179,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 @Mod(modid = MainMod.MODID, version = MainMod.VERSION)
 public class MainMod {
-	public static final String MODID = "MyMods";
+	public static final String MODID = "devoxx4kids";
 	public static final String VERSION = "1.0";
 
 	@EventHandler
@@ -243,10 +269,13 @@ public class DragonSpawner {
 
 	@SubscribeEvent
 	public void spawnDragon(PlaceEvent event) {
-		if (event.getPlacedBlock() == Blocks.sponge.getBlockState().getBaseState()) {
-			event.getWorld().setBlockToAir(new BlockPos(event.getPos().getX(), event.getPos().getY(),event.getPos().getZ()));
+		if (event.getPlacedBlock() == Blocks.dragon_egg.getBlockState().getBaseState()) {
+			event.getWorld().setBlockToAir(
+					new BlockPos(event.getPos().getX(), event.getPos().getY(),
+							event.getPos().getZ()));
 			EntityDragon dragon = new EntityDragon(event.getWorld());
-			dragon.setLocationAndAngles(event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(), 0, 0);
+			dragon.setLocationAndAngles(event.getPos().getX(), event.getPos()
+					.getY(), event.getPos().getZ(), 0, 0);
 			dragon.getPhaseManager().setPhase(PhaseList.TAKEOFF);
 			event.getWorld().spawnEntityInWorld(dragon);
 		}
@@ -323,7 +352,6 @@ package org.devoxx4kids.forge.mods;
 import java.util.List;
 
 import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -338,12 +366,12 @@ public class CreeperSpawnAlert {
 			return;
 		}
 
-		List players = event.getEntity().worldObj.playerEntities;
+		List<EntityPlayer> players = event.getEntity().worldObj.playerEntities;
 
-		for (int i = 0; i < players.size(); i++) {
-			EntityPlayer player = (EntityPlayer) players.get(i);
+		for (EntityPlayer player : players) {
 			if (event.getWorld().isRemote) {
-				player.addChatComponentMessage(new TextComponentString(TextFormatting.GREEN + "A creeper has spawned!"));
+				player.addChatComponentMessage(new TextComponentString(
+						TextFormatting.GREEN + "A creeper has spawned!"));
 			}
 		}
 	}
@@ -453,10 +481,9 @@ public void sendAlert(EntityJoinWorldEvent event) {
 		message = "A zombie has spawned";
 	}
 
-	List players = event.getEntity().worldObj.playerEntities;
+	List<EntityPlayer> players = event.getEntity().worldObj.playerEntities;
 
-	for (int i = 0; i < players.size(); i++) {
-		EntityPlayer player = (EntityPlayer) players.get(i);
+	for (EntityPlayer player : players) {
 		if (event.getWorld().isRemote) {
 			player.addChatComponentMessage(new TextComponentString(TextFormatting.GREEN + message));
 		}
@@ -494,8 +521,9 @@ Explain how to reach `EntityMob`.
 package org.devoxx4kids.forge.mods;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntitySnowball;
-import net.minecraft.entity.projectile.EntityTippedArrow;
+import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -512,7 +540,7 @@ public class SharpSnowballs {
 		}
 
 		if (!world.isRemote) {
-			EntityTippedArrow arrow = new EntityTippedArrow(world);
+			EntityArrow arrow = new EntitySpectralArrow(world);
 			arrow.setLocationAndAngles(snowball.posX, snowball.posY, snowball.posZ,
 					0, 0);
 			arrow.motionX = snowball.motionX;
@@ -663,16 +691,19 @@ public class RainWater {
 		}
 
 		for (int i = y; i < 256; i++) {
-			if (world.getBlockState(new BlockPos(x, i, z)) != Blocks.air.getBlockState().getBaseState()) {
+			if (world.getBlockState(new BlockPos(x, i, z)) != Blocks.air
+					.getBlockState().getBaseState()) {
 				return;
 			}
 		}
 
-		if (world.isRemote || !world.getBlockState(new BlockPos(x, y - 1, z)).isFullCube()) {
+		if (world.isRemote
+				|| !world.getBlockState(new BlockPos(x, y - 1, z)).isFullCube()) {
 			return;
 		}
 
-		world.setBlockState(new BlockPos(x, y, z), Blocks.water.getBlockState().getBaseState());
+		world.setBlockState(new BlockPos(x, y, z), Blocks.water.getBlockState()
+				.getBaseState());
 	}
 }
 ----
@@ -818,7 +849,6 @@ Then, register it using the line shown in <<Climber_Registering>>.
 ====
 [source, java]
 ----
-FMLCommonHandler.instance().bus().register(new WallClimber());
 MinecraftForge.EVENT_BUS.register(new WallClimber());
 ----
 
@@ -846,19 +876,12 @@ You'll find that Eclipse flags a missing import for FMLCommonHandler so make sur
 ----
 package org.devoxx4kids.forge.mods;
 
-import java.util.Random;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.entity.projectile.EntityTippedArrow;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemBow;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
-import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ArrowShotgun {
@@ -870,13 +893,11 @@ public class ArrowShotgun {
 		EntityPlayer player = event.getEntityPlayer();
 		World world = event.getWorld();
 
-		Random random = new Random();
-
-		float velocity = 2.0F;
-
 		for (int i = 0; i < arrows; i++) {
 			EntityArrow arrow = new EntityTippedArrow(world, player);
-			arrow.func_184547_a(player, player.rotationPitch, player.rotationYaw, 0.0F, ItemBow.func_185059_b(event.getCharge()) * 3.0F, 12.0F);
+			arrow.func_184547_a(player, player.rotationPitch,
+					player.rotationYaw, 0.0F,
+					ItemBow.func_185059_b(event.getCharge()) * 3.0F, 12.0F);
 			arrow.canBePickedUp = EntityArrow.PickupStatus.DISALLOWED;
 			arrow.setFire(10000);
 			if (!world.isRemote) {
@@ -927,7 +948,6 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -958,7 +978,7 @@ public class SkeletonWar {
 				Items.chainmail_boots, Items.golden_boots, Items.iron_boots,
 				Items.diamond_boots);
 
-		skeleton.targetTasks.addTask(3, new EntityAINearestAttackableTarget(
+		skeleton.targetTasks.addTask(3, new EntityAINearestAttackableTarget<EntitySkeleton>(
 				skeleton, EntitySkeleton.class, true));
 		skeleton.canPickUpLoot();
 
@@ -1017,10 +1037,10 @@ import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class EnchantmentArrowFast extends Enchantment {
+
 	public EnchantmentArrowFast() {
-		super(Enchantment.Rarity.UNCOMMON, EnumEnchantmentType.BOW,
-				new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND,
-						EntityEquipmentSlot.OFFHAND });
+		super(Enchantment.Rarity.VERY_RARE, EnumEnchantmentType.BOW,
+				new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND });
 		this.setName("arrowFast");
 	}
 
@@ -1048,7 +1068,7 @@ public class EnchantmentArrowFast extends Enchantment {
 	}
 
 	@SubscribeEvent
-	public void decreaseBowUseDuration(LivingEntityUseItemEvent.Tick event) {
+	public void decreaseBowUseDuration(LivingEntityUseItemEvent.Start event) {
 		if (event.getItem() == null) {
 			return;
 		}
@@ -1057,15 +1077,14 @@ public class EnchantmentArrowFast extends Enchantment {
 			return;
 		}
 
-		int level = EnchantmentHelper.getEnchantmentLevel(MainMod.haste,
-				event.getItem());
+		int level = EnchantmentHelper.getEnchantmentLevel(MainMod.haste, event.getItem());
 
 		switch (level) {
-		case 1:
-			event.setDuration(event.getDuration() - 1);
-			break;
 		case 2:
-			event.setDuration(event.getDuration() - 2);
+			event.setDuration(event.getDuration() - 10);
+			break;
+		case 1:
+			event.setDuration(event.getDuration() - 5);
 			break;
 		default:
 			break;
@@ -1099,7 +1118,7 @@ MinecraftForge.EVENT_BUS.register(haste);
 Enchantment.enchantmentRegistry.register(100, new ResourceLocation("arrowFast"), haste);
 ====
 
-Lastly, you will have to make a new file to make sure the name of the enchantment shows up correctly ("Haste" instead of "enchantment.arrowFast"). If you close the "src/main/java" folder in which all of your files are located, you should see a folder labeled "src/main/resources" directly underneath. Right click on that folder, and select New > Package. Name your new package `assets.mymods.lang`. Then, right click on your new package and select New > File. When you are asked for the name of the new file, enter the name `en_US.lang`. In the new file, add in the text shown in <<Fast_Bows_Lang_File>>.
+Lastly, you will have to make a new file to make sure the name of the enchantment shows up correctly ("Haste" instead of "enchantment.arrowFast"). If you close the "src/main/java" folder in which all of your files are located, you should see a folder labeled "src/main/resources" directly underneath. Right click on that folder, and select New > Package. Name your new package `assets.devoxx4kids.lang`. Then, right click on your new package and select New > File. When you are asked for the name of the new file, enter the name `en_US.lang`. In the new file, add in the text shown in <<Fast_Bows_Lang_File>>.
 
 [[Fast_Bows_Lang_File]]
 .Fast Bows .lang file

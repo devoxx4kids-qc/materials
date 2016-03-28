@@ -1,9 +1,9 @@
 package org.devoxx4kids.forge.mods;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityTNTPrimed;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntitySnowball;
-import net.minecraft.entity.projectile.EntityTippedArrow;
+import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -20,7 +20,7 @@ public class SharpSnowballs {
 		}
 
 		if (!world.isRemote) {
-			EntityTippedArrow arrow = new EntityTippedArrow(world);
+			EntityArrow arrow = new EntitySpectralArrow(world);
 			arrow.setLocationAndAngles(snowball.posX, snowball.posY, snowball.posZ,
 					0, 0);
 			arrow.motionX = snowball.motionX;

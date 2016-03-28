@@ -11,8 +11,7 @@ public class DragonSpawner {
 
 	@SubscribeEvent
 	public void spawnDragon(PlaceEvent event) {
-		if (event.getPlacedBlock() == Blocks.sponge.getBlockState()
-				.getBaseState()) {
+		if (event.getPlacedBlock() == Blocks.dragon_egg.getBlockState().getBaseState()) {
 			event.getWorld().setBlockToAir(
 					new BlockPos(event.getPos().getX(), event.getPos().getY(),
 							event.getPos().getZ()));

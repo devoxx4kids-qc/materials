@@ -9,10 +9,10 @@ import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class EnchantmentArrowFast extends Enchantment {
+
 	public EnchantmentArrowFast() {
-		super(Enchantment.Rarity.UNCOMMON, EnumEnchantmentType.BOW,
-				new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND,
-						EntityEquipmentSlot.OFFHAND });
+		super(Enchantment.Rarity.VERY_RARE, EnumEnchantmentType.BOW,
+				new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND });
 		this.setName("arrowFast");
 	}
 
@@ -40,7 +40,8 @@ public class EnchantmentArrowFast extends Enchantment {
 	}
 
 	@SubscribeEvent
-	public void decreaseBowUseDuration(LivingEntityUseItemEvent.Tick event) {
+	public void decreaseBowUseDuration(LivingEntityUseItemEvent.Start event) {
+
 		if (event.getItem() == null) {
 			return;
 		}
@@ -49,15 +50,14 @@ public class EnchantmentArrowFast extends Enchantment {
 			return;
 		}
 
-		int level = EnchantmentHelper.getEnchantmentLevel(MainMod.haste,
-				event.getItem());
+		int level = EnchantmentHelper.getEnchantmentLevel(MainMod.haste, event.getItem());
 
 		switch (level) {
-		case 1:
-			event.setDuration(event.getDuration() - 1);
-			break;
 		case 2:
-			event.setDuration(event.getDuration() - 2);
+			event.setDuration(event.getDuration() - 10);
+			break;
+		case 1:
+			event.setDuration(event.getDuration() - 5);
 			break;
 		default:
 			break;

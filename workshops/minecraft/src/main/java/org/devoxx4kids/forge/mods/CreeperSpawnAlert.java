@@ -3,7 +3,6 @@ package org.devoxx4kids.forge.mods;
 import java.util.List;
 
 import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -18,10 +17,9 @@ public class CreeperSpawnAlert {
 			return;
 		}
 
-		List players = event.getEntity().worldObj.playerEntities;
+		List<EntityPlayer> players = event.getEntity().worldObj.playerEntities;
 
-		for (int i = 0; i < players.size(); i++) {
-			EntityPlayer player = (EntityPlayer) players.get(i);
+		for (EntityPlayer player : players) {
 			if (event.getWorld().isRemote) {
 				player.addChatComponentMessage(new TextComponentString(
 						TextFormatting.GREEN + "A creeper has spawned!"));
