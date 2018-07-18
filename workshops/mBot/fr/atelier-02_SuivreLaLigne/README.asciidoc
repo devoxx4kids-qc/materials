@@ -1,0 +1,60 @@
+= Atelier 02 - Suivre la ligne
+
+Dans cet atelier nous allons utiliser le capteur de suivi de ligne. 
+
+[.text-center]
+image::../../resources/images/mBot-line-follower-sensor.jpg[mBot, 300, 300, link="../../resources/images/mBot-line-follower-sensor.jpg"]
+
+[cols="1,4"]
+|===
+|*Niveau:*| Débutant
+|*Objectif:*| Utiliser le capteur de suivi de ligne
+|*Age:*| 9 à 11ans
+|*Durée:*| 1h30 à 2h
+|===
+
+== Etape 1: A la découverte du capteur de suivi de ligne
+Commençons par découvrir le capteur de suivi de ligne.
+[.text-center]
+image::../../resources/images/mBot-line-follower-sensor.png[mBot, 300, 300, link="../../resources/images/mBot-line-follower-sensor.png"]
+
+Le robot mBot possède un composant de suivi de ligne. Celui-ci est composé de deux capteurs infrarouges (sensor1 et sensor2).
+Chaque capteur infrarouge est constitué d'un émetteur et d'un récepteur.
+
+Faire le petit programme suivant pour en découvrir son fonctionnement.
+
+image::../../resources/images/Workshop2_Step1_EN.png[Siveur de ligne, link="../../resources/images/Workshop2_Step1_EN.png"] 
+Et étudier les situations suivantes:
+[.text-center]
+image::../../resources/images/mBot-line-follower-sensor-situations.png[mBot, -1, 100, link="../../resources/images/mBot-line-follower-sensor.png"]
+
+[cols="^s,^n,^n,^n,^n,^n,^n",options="header"]
+|===
+|         2+^| Sensor 1     2+^| Sensor 2        2+^| values 
+|Situation 1:| Non reçu |0 | Non reçu | 0 | 00 | 0
+|Situation 2:| Non reçu |0 | Reçu     | 1 | 01 | 1
+|Situation 3:| Reçu     |1 | Non reçu | 0 | 10 | 2
+|Situation 4:| Reçu     |1 | Reçu     | 1 | 11 | 3
+|===
+
+== Etape 2: Détection du vide
+L'objectif de cette étape est d'arreter le robot si un précipice est détecté.
+ 
+Laissez mBot avancer sur une table blanche (ou une table de couleur claire). Il doit s'arrêter quand il arrive au bord de la table.
+
+- Recopie le programme suivant :
+
+image::../../resources/images/Workshop2_Step2_EN.png[Siveur de ligne, link="../../resources/images/Workshop2_Step1_EN.png"] 
+
+- Branche le robot et execute le programme 
+- Peux-tu expliquer les éléments du programme?
+
+== Etape 3: Suivre une ligne.
+- Recopie le programme suivant :
+
+image::../../resources/images/Workshop2_Step3_EN.png[Siveur de ligne, link="../../resources/images/Workshop2_Step1_EN.png"] 
+
+- Essaie ton nouveau programme?
+- Améliore le cas de la situation 4.
+- Change la vitesse des moteurs.
+- Que peux-tu rajouter pour le rendre plus amusant?
